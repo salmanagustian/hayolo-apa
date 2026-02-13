@@ -1,0 +1,13 @@
+module user-auth-go
+
+go 1.24.1
+
+require (
+	github.com/go-sql-driver/mysql v1.9.3
+	golang.org/x/oauth2 v0.35.0
+)
+
+require (
+	cloud.google.com/go/compute/metadata v0.3.0 // indirect
+	filippo.io/edwards25519 v1.1.0 // indirect
+)
