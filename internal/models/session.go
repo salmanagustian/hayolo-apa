@@ -66,9 +66,11 @@ func GetSessionByToken(token string) (*Session, error) {
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}
+
 	if err != nil {
 		return nil, err
 	}
+
 	return session, nil
 }
 

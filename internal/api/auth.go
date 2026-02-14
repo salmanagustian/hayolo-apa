@@ -74,7 +74,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &http.Cookie{
-		Name:     "sess_token",
+		Name:     "session_token",
 		Value:    session.Token,
 		Path:     "/",
 		HttpOnly: true,
