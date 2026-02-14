@@ -1,10 +1,11 @@
 package main
 
 import (
-	"user-auth-go/internal/config"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"user-auth-go/internal/config"
 )
 
 func main() {
@@ -15,7 +16,12 @@ func main() {
 		fmt.Fprintf(w, "Server is running!")
 	})
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	// initialize server
-	fmt.Println("Server running at http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	fmt.Printf("Server running at http://localhost:%s\n", port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
