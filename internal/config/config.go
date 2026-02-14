@@ -14,7 +14,7 @@ import (
 )
 
 var DB *sql.DB
-var GoogleAuthConfig *oauth2.Config
+var GoogleOAuthConfig *oauth2.Config
 
 func Init() {
 	loadEnvFile()
@@ -79,7 +79,7 @@ func initDB() {
 }
 
 func initGoogleOAuth() {
-	GoogleAuthConfig = &oauth2.Config{
+	GoogleOAuthConfig = &oauth2.Config{
 		ClientID:     getEnv("GOOGLE_CLIENT_ID", ""),
 		ClientSecret: getEnv("GOOGLE_CLIENT_SECRET", ""),
 		RedirectURL:  getEnv("GOOGLE_REDIRECT_URL", "http://localhost:8080/auth/google/callback"),

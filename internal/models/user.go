@@ -57,7 +57,7 @@ func CreateUser(email, password string) (*User, error) {
 
 // handle create user with provider type is `google`
 func CreateUserWithGoogle(email, googleID, fullName string) (*User, error) {
-	result, err := config.DB.Exec("INSERT INTO users (email, google_id, fullname, auth_provider)",
+	result, err := config.DB.Exec("INSERT INTO users (email, google_id, full_name, auth_provider) VALUES (?, ?, ?, ?)",
 		email, googleID, fullName, constants.AuthProviderGoogle)
 
 	if err != nil {
