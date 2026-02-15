@@ -1,0 +1,58 @@
+{{define "content"}}
+<div class="card">
+    <h1>Sign Up</h1>
+    
+    {{if .Error}}
+    <div class="alert error">{{.Error}}</div>
+    {{end}}
+
+    <form id="signupForm">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required minlength="6">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+
+    <div class="divider">or</div>
+
+    <a href="/api/v1/auth/google" class="btn btn-google">Sign Up with Google</a>
+
+    <p class="text-center">
+        Already have an account? <a href="/login">Login</a>
+    </p>
+</div>
+
+<script>
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    try {
+        const res = await fetch('/api/signup', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email, password})
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+            window.location.href = '/profile/edit';
+        } else {
+            alert(data.message);
+        }
+    } catch (err) {
+        alert('Something went wrong');
+    }
+});
+</script>
+{{end}}

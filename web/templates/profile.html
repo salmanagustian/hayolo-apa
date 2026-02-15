@@ -1,0 +1,49 @@
+{{define "content"}}
+<div class="card">
+    <h1>Profile</h1>
+    
+    <div class="profile-info">
+        <div class="info-row">
+            <span class="label">Full Name</span>
+            <span class="value">{{if .User.FullName}}{{.User.FullName}}{{else}}-{{end}}</span>
+        </div>
+        
+        <div class="info-row">
+            <span class="label">Email</span>
+            <span class="value">{{.User.Email}}</span>
+        </div>
+        
+        <div class="info-row">
+            <span class="label">Telephone</span>
+            <span class="value">{{if .User.Telephone}}{{.User.Telephone}}{{else}}-{{end}}</span>
+        </div>
+        
+        <div class="info-row">
+            <span class="label">Auth Method</span>
+            <span class="value">{{.User.AuthProvider}}</span>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <a href="/profile/edit" class="btn btn-primary">Edit</a>
+        <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+    </div>
+</div>
+
+<script>
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+    try {
+        const res = await fetch('/api/logout', {method: 'POST'});
+        const data = await res.json();
+        
+        if (data.success) {
+            window.location.href = '/login';
+        } else {
+            alert(data.message);
+        }
+    } catch (err) {
+        alert('Something went wrong');
+    }
+});
+</script>
+{{end}}

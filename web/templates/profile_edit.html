@@ -1,0 +1,59 @@
+{{define "content"}}
+<div class="card">
+    <h1>Edit Profile</h1>
+
+    <form id="profileForm">
+        <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name" value="{{.User.FullName}}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="telephone">Telephone</label>
+            <input type="tel" id="telephone" name="telephone" value="{{.User.Telephone}}">
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="{{.User.Email}}" required {{if eq .User.AuthProvider "google"}}disabled{{end}}>
+            {{if eq .User.AuthProvider "google"}}
+            <small>Email cannot be changed for Google accounts</small>
+            {{end}}
+        </div>
+
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Save & Continue</button>
+            <a href="/profile" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script>
+document.getElementById('profileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const full_name = document.getElementById('full_name').value;
+    const telephone = document.getElementById('telephone').value;
+    const emailInput = document.getElementById('email');
+    const email = emailInput.disabled ? emailInput.value : emailInput.value;
+    
+    try {
+        const res = await fetch('/api/profile', {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({full_name, telephone, email})
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+            window.location.href = '/profile';
+        } else {
+            alert(data.message);
+        }
+    } catch (err) {
+        alert('Something went wrong');
+    }
+});
+</script>
+{{end}}
