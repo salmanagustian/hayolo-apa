@@ -7,25 +7,36 @@ import (
 	"os"
 	"user-auth-go/internal/api"
 	"user-auth-go/internal/config"
+	"user-auth-go/web/handlers"
 )
 
 func main() {
 	// initialize config
 	config.Init()
+	handlers.Init()
 
-	// register public auth handlers
+	// static files
+	fs := http.FileServer(http.Dir("web/static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	// register web pages routes
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	})
+	http.HandleFunc("/login", handlers.LoginPage)
+	http.HandleFunc("/signup", handlers.SignupPage)
+	http.HandleFunc("/profile", handlers.ProfilePage)
+	http.HandleFunc("/profile/edit", handlers.ProfileEditPage)
+
+	// register public and protected API routes
 	http.HandleFunc("/api/signup", api.Signup)
 	http.HandleFunc("/api/login", api.Login)
 	http.HandleFunc("/api/auth/google", api.GoogleLogin)
 	http.HandleFunc("/api/auth/google/callback", api.GoogleCallback)
 
-	// register protected handlers
+	// protected handlers
 	http.HandleFunc("/api/logout", api.AuthGuard(api.Logout))
 	http.HandleFunc("/api/profile", api.AuthGuard(api.Profile))
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Server is running!")
-	})
 
 	port := os.Getenv("PORT")
 	if port == "" {
